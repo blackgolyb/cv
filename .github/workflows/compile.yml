@@ -15,12 +15,16 @@ jobs:
       #     root_file: |
       #       en.tex
       #       ua.tex
+      - name: Rename PDF
+        run: |
+          mv en.tex Omelnitskyi_Andrii_CV.tex
+          mv ua.tex Омельніцький_Андрій_CV.tex
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            en.tex
-            ua.tex
+            Omelnitskyi_Andrii_CV.tex
+            Омельніцький_Андрій_CV.tex
       # - name: Upload PDF file
       #   uses: actions/upload-artifact@v4
       #   with:
