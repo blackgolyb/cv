@@ -9,24 +9,19 @@ jobs:
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v4
-      # - name: Compile LaTeX document
-      #   uses: xu-cheng/latex-action@v3
-      #   with:
-      #     root_file: |
-      #       en.tex
-      #       ua.tex
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: |
+            en.tex
+            ua.tex
       - name: Rename PDF
         run: |
-          mv en.tex Omelnitskyi_Andrii_CV.tex
-          mv ua.tex Омельніцький_Андрій_CV.tex
+          mv en.pdf Omelnitskyi_Andrii_EN_CV.pdf
+          mv ua.pdf Omelnitskyi_Andrii_UA_CV.pdf
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            Omelnitskyi_Andrii_CV.tex
-            Омельніцький_Андрій_CV.tex
-      # - name: Upload PDF file
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: CV
-      #     path: en.pdf
+            Omelnitskyi_Andrii_EN_CV.pdf
+            Omelnitskyi_Andrii_UA_CV.pdf
