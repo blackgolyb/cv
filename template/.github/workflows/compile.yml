@@ -1,6 +1,8 @@
 name: Build LaTeX document
 on:
   push:
+    branches:
+      - release
     tags:
       - "v*.*.*"
 jobs:
@@ -12,16 +14,10 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: |
-            en.tex
-            ua.tex
+          root_file: main.tex
       - name: Rename PDF
-        run: |
-          mv en.pdf Omelnitskyi_Andrii_EN_CV.pdf
-          mv ua.pdf Omelnitskyi_Andrii_UA_CV.pdf
+        run: mv main.pdf Omelnitskyi_Andrii_CV.pdf
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            Omelnitskyi_Andrii_EN_CV.pdf
-            Omelnitskyi_Andrii_UA_CV.pdf
+          files: Omelnitskyi_Andrii_CV.pdf
