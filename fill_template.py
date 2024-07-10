@@ -19,7 +19,7 @@ class NotLaTeXFileError(ValueError):
         super().__init__(f"{path} is not LaTeX file")
 
 
-def is_latex_file(filepath):
+def is_latex_file(filepath: Path):
     return filepath.suffix.lower() == ".tex"
 
 
@@ -46,8 +46,9 @@ def fill_content_folder(path: Path, data: dict):
 
 
 def prepare_target_folder(src: Path, dist: Path):
-    remove_tree(dist)
-    copy_tree(src, dist)
+    if dist.exists() and dist.is_dir():
+        remove_tree(dist)
+    copy_tree(str(src), str(dist))
 
 
 def load_data_from_file(filepath: Path):
@@ -61,7 +62,7 @@ def main():
     data = load_data_from_file(DATA_OBJECT_FILE)
     data = {DATA_OBJECT_NAME: data}
     prepare_target_folder(TEMPLATE_FOLDER, TARGET_FOLDER)
-    fill_content_file(TARGET_FOLDER / CONTENT_FOLDER, data)
+    fill_content_folder(TARGET_FOLDER / CONTENT_FOLDER, data)
 
 
 if __name__ == "__main__":
