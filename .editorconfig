@@ -1,0 +1,6 @@
+root = true
+
+
+[*.{tex,cls}]
+indent_style = space
+indent_size = 2
