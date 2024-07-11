@@ -1,24 +1,21 @@
 \cvProjects{
-  \cvProjectsItem
-    {Project Name}
-    {Event dates}
-    {Project description(Your input in the project)}
-    {link}
-    {
-      \cvProjectsItemDescription
-        {Tools \& technologies used: xxx,xxx}
-      \cvProjectsItemDescription
-        {More description on the project(The output you achieved by working on the project)}
-    }
-  \cvProjectsItem
-    {Project Name}
-    {Event dates}
-    {Project description(Your input in the project)}
-    {link}
-    {
-      \cvProjectsItemDescription
-        {Tools \& technologies used: xxx,xxx}
-      \cvProjectsItemDescription
-        {More description on the project(The output you achieved by working on the project)}
-    }
+  \BLOCK{ for project in data.projects }
+    \cvProjectsItem
+      {\VAR{ project.name }}
+      {\VAR{ project.period }}
+      {\VAR{ project.brief }}
+      {\VAR{ project.link }}
+      {
+        \BLOCK{ for desc in project.descriptions }
+          \cvProjectsItemDescription
+            {\VAR{ desc }}
+        \BLOCK{ endfor }
+      }
+      {
+        \BLOCK{ for tech in project.technologies }
+          \cvProjectsItemTechnology
+            {\VAR{ tech }}
+        \BLOCK{ endfor }
+      }
+  \BLOCK{ endfor }
 }

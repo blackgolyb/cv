@@ -1,24 +1,21 @@
 \cvExperience{
-  \cvExperienceItem
-    {Company Name}
-    {Event dates}
-    {Your Role}
-    {City}
-    {
-      \cvExperienceItemDescription
-        {Work description line 1}
-      \cvExperienceItemDescription
-        {Work description line 2}
-    }
-  \cvExperienceItem
-    {Company Name}
-    {Event dates}
-    {Your Role}
-    {City}
-    {
-      \cvExperienceItemDescription
-        {Work description line 1}
-      \cvExperienceItemDescription
-        {Work description line 2}
-    }
+  \BLOCK{ for exp in data.experience }
+    \cvExperienceItem
+      {\VAR{ exp.name }}
+      {\VAR{ exp.period }}
+      {\VAR{ exp.position }}
+      {\VAR{ exp.city }}
+      {
+        \BLOCK{ for desc in exp.descriptions }
+          \cvExperienceItemDescription
+            {\VAR{ desc }}
+        \BLOCK{ endfor }
+      }
+      {
+        \BLOCK{ for tech in exp.technologies }
+          \cvExperienceItemTechnology
+            {\VAR{ tech }}
+        \BLOCK{ endfor }
+      }
+  \BLOCK{ endfor }
 }

@@ -1,18 +1,9 @@
 \cvSkills{
-  \cvSkillsCategory{Category}{
-    \cvSkillsItem{Python}{}
-    \cvSkillsItem{Python}{}
-    \cvSkillsItem{Python}{}
-    \cvSkillsItem{Python}{}
-  }
-  \cvSkillsCategory{Category}{
-    \cvSkillsItem{Python}{}
-    \cvSkillsItem{Python}{}
-    \cvSkillsItem{Python}{}
-  }
-  \cvSkillsCategory{Category}{
-    \cvSkillsItem{Python}{}
-    \cvSkillsItem{Python}{}
-    \cvSkillsItem{Python}{}
-  }
+  \BLOCK{ for category in data.skills }
+    \cvSkillsCategory{\VAR{ category.name }}{
+      \BLOCK{ for skill in category.skills }
+        \cvSkillsItem{\VAR{ skill }}{}
+      \BLOCK{ endfor }
+    }
+  \BLOCK{ endfor }
 }

@@ -1,8 +1,5 @@
 \cvContacts{
-  \cvContactsItem{\faPhone}{\phone}{}
-  \cvContactsItem{\faEnvelope}{\email}{mailto:\email}
-  \cvContactsItem{\faGithub}{GitHub Profile}{\github}
-  \cvContactsItem{\faLinkedin}{LinkedIn Profile}{\linkedin}
-  \cvContactsItem{\faTelegram}{Telegram Profile}{https://t.me/blackgolyb}
-  \cvContactsItem{\faGlobe}{Portfolio}{https://blackgolyb.github.io}
+  \BLOCK{ for contact in data.contacts }
+    \cvContactsItem{\VAR{ contact.icon }}{\VAR{ contact.label }}{\VAR{ contact.link }}
+  \BLOCK{ endfor }
 }

@@ -4,7 +4,7 @@ from pathlib import Path
 import jinja2
 
 
-PROJECT_FOLDER = Path(__file__).parent
+PROJECT_FOLDER = Path(__file__).parent.parent
 TEMPLATE_FOLDER = PROJECT_FOLDER / "template"
 CONTENT_FOLDER = "content"
 
@@ -12,6 +12,24 @@ TARGET_FOLDER = PROJECT_FOLDER / "target"
 
 DATA_OBJECT_NAME = "data"
 DATA_OBJECT_FILE = PROJECT_FOLDER / "data.json"
+
+
+class LaTeXEnvironment(jinja2.Environment):
+    default_config = {
+        "block_start_string": "\BLOCK{",
+        "block_end_string": "}",
+        "variable_start_string": "\VAR{",
+        "variable_end_string": "}",
+        "comment_start_string": "\#{",
+        "comment_end_string": "}",
+        "line_statement_prefix": "%%",
+        "line_comment_prefix": "%#",
+        "trim_blocks": True,
+        "autoescape": False,
+    }
+
+    def __init__(self, **kwargs):
+        super().__init__(**{**self.default_config, **kwargs})
 
 
 class NotLaTeXFileError(ValueError):
@@ -28,9 +46,9 @@ def fill_content_file(path: Path, data: dict):
         raise NotLaTeXFileError(path)
 
     content = path.read_text()
-    env = jinja2.Environment()
+    env = LaTeXEnvironment()
     template = env.from_string(content)
-    res = template.render(**data)
+    res = template.render(data=data["data"])
     path.write_text(res)
 
 

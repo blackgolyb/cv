@@ -156,8 +156,8 @@
   \cvSectionList{#1}
 }
 
-\newcommand{\cvEducationItem}[3]{
-  \cvSectionItem{#1}{#2}{#3}{}
+\newcommand{\cvEducationItem}[4]{
+  \cvSectionItem{#1}{#2}{#3 #4}{}
 }
 
 
@@ -166,11 +166,12 @@
   \cvSectionList{#1}
 }
 
-\newcommand{\cvExperienceItem}[5]{
+\newcommand{\cvExperienceItem}[6]{
   \cvSectionItem{#1}{#2}{#3}{#4}
   \vspace{-2.0mm}
   \resumeItemListStart
-  #5
+    \cvExperienceItemDescription{\textbf{Technologies}: #6}
+    #5
   \resumeItemListEnd
   \vspace{-3.0mm}
 }
@@ -179,23 +180,32 @@
   \item #1
 }
 
+\newcommand{\cvExperienceItemTechnology}[1]{
+  #1
+}
+
 
 \newcommand{\cvProjects}[1]{
   \cvSection{Projects}
   \cvSectionList{#1}
 }
 
-\newcommand{\cvProjectsItem}[5]{
+\newcommand{\cvProjectsItem}[6]{
   \cvSectionItem{#1}{#2}{#3}{}
   \vspace{-2.0mm}
   \resumeItemListStart
-  #5
+    \cvProjectsItemDescription{\textbf{Technologies}: #6}
+    #5
   \resumeItemListEnd
   \vspace{-3.0mm}
 }
 
 \newcommand{\cvProjectsItemDescription}[1]{
   \item #1
+}
+
+\newcommand{\cvProjectsItemTechnology}[1]{
+  #1
 }
 
 
