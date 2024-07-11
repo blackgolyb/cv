@@ -1,0 +1,240 @@
+%---- Required Packages and Functions ----
+
+\usepackage{latexsym}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{ragged2e}
+\usepackage[empty]{fullpage}
+\usepackage{wrapfig}
+\usepackage{lipsum}
+\usepackage{tabularx}
+\usepackage{titlesec}
+\usepackage{geometry}
+\usepackage{marvosym}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage{cfr-lm}
+\usepackage[T1]{fontenc}
+\setlength{\footskip}{4.08003pt} 
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\geometry{left=1.0cm, top=1cm, right=1cm, bottom=1cm}
+% Adjust margins
+%\addtolength{\oddsidemargin}{-0.5in}
+%\addtolength{\evensidemargin}{-0.5in}
+%\addtolength{\textwidth}{1in}
+\usepackage[most]{tcolorbox}
+\tcbset{
+	frame code={}
+	center title,
+	left=0pt,
+	right=0pt,
+	top=0pt,
+	bottom=0pt,
+	colback=gray!20,
+	colframe=white,
+	width=\dimexpr\textwidth\relax,
+	enlarge left by=-2mm,
+	boxsep=4pt,
+	arc=0pt,outer arc=0pt,
+}
+
+\urlstyle{same}
+
+\raggedright
+\setlength{\footskip}{4.08003pt}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-7pt}]
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[2]{
+  \item{
+    \textbf{#1}{\hspace{0.5mm}#2 \vspace{-0.5mm}}
+  }
+}
+
+\newcommand{\resumePOR}[3]{
+\vspace{0.5mm}\item
+  \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \textbf{#1}\hspace{0.3mm}#2 & \textit{\small{#3}} 
+  \end{tabular*}
+  \vspace{-2mm}
+}
+
+\newcommand{\resumeSubheading}[4]{
+\vspace{0.5mm}\item
+  \begin{tabular*}{0.98\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \textbf{#1} & \textit{\footnotesize{#4}} \\
+    \textit{\footnotesize{#3}} &  \footnotesize{#2}\\
+  \end{tabular*}
+  \vspace{-2.4mm}
+}
+
+\newcommand{\resumeProject}[4]{
+\vspace{0.5mm}\item
+  \begin{tabular*}{0.98\textwidth}[t]{l@{\extracolsep{\fill}}r}
+    \textbf{#1} & \textit{\footnotesize{#3}} \\
+    \footnotesize{\textit{#2}} & \footnotesize{#4}
+  \end{tabular*}
+  \vspace{-2.4mm}
+}
+
+\newcommand{\resumeSubItem}[2]{\resumeItem{#1}{#2}\vspace{-4pt}}
+
+% \renewcommand{\labelitemii}{$\circ$}
+\renewcommand{\labelitemi}{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=*,labelsep=0mm]}
+\newcommand{\resumeHeadingSkillStart}{\begin{itemize}[leftmargin=*,itemsep=1.7mm, rightmargin=2ex]}
+\newcommand{\resumeItemListStart}{\begin{justify}\begin{itemize}[leftmargin=3ex, rightmargin=2ex, noitemsep,labelsep=1.2mm,itemsep=0mm]\small}
+
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}\vspace{2mm}}
+\newcommand{\resumeHeadingSkillEnd}{\end{itemize}\vspace{-2mm}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\end{justify}\vspace{-2mm}}
+\newcommand{\cvsection}[1]{%
+\vspace{2mm}
+\begin{tcolorbox}
+  \textbf{\large #1}
+\end{tcolorbox}
+  \vspace{-4mm}
+}
+
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}%
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}%
+\newcolumntype{C}{>{\centering\arraybackslash}X}%
+%---- End of Packages and Functions ------
+
+
+\newcommand{\cvSection}[1]{
+  \section{\textbf{#1}}
+}
+
+\newcommand{\cvSectionList}[1]{
+  \resumeSubHeadingListStart
+  #1
+  \resumeSubHeadingListEnd
+}
+
+\newcommand{\cvSectionItem}[4]{
+  \resumeSubheading{#1}{#4}{#3}{#2}
+}
+
+
+\newcommand{\header}{
+  \textbf{\Large \lastName\ \firstName}\\
+  \textit{\position}\\
+}
+
+
+\newcommand{\cvContacts}[1]{
+\begin{multicols}{3}\raggedcolumns
+  \begin{itemize}[label={}, leftmargin=0pt, itemsep=0pt]
+    #1
+  \end{itemize}
+\end{multicols}
+}
+
+\newcommand{\cvContactsItem}[3]{
+  \item{\href{#3}{\raisebox{0.0\height}{\footnotesize #1}\ {#2}}}
+}
+
+
+\newcommand{\cvEducation}[1]{
+  \cvSection{Education}
+  \cvSectionList{#1}
+}
+
+\newcommand{\cvEducationItem}[3]{
+  \cvSectionItem{#1}{#2}{#3}{}
+}
+
+
+\newcommand{\cvExperience}[1]{
+  \cvSection{Experience}
+  \cvSectionList{#1}
+}
+
+\newcommand{\cvExperienceItem}[5]{
+  \cvSectionItem{#1}{#2}{#3}{#4}
+  \vspace{-2.0mm}
+  \resumeItemListStart
+  #5
+  \resumeItemListEnd
+  \vspace{-3.0mm}
+}
+
+\newcommand{\cvExperienceItemDescription}[1]{
+  \item #1
+}
+
+
+\newcommand{\cvProjects}[1]{
+  \cvSection{Projects}
+  \cvSectionList{#1}
+}
+
+\newcommand{\cvProjectsItem}[5]{
+  \cvSectionItem{#1}{#2}{#3}{}
+  \vspace{-2.0mm}
+  \resumeItemListStart
+  #5
+  \resumeItemListEnd
+  \vspace{-3.0mm}
+}
+
+\newcommand{\cvProjectsItemDescription}[1]{
+  \item #1
+}
+
+
+\newcommand{\cvSkills}[1]{
+  \cvSection{Skills}
+  \begin{itemize}[leftmargin=0.1in, label={}]
+    \small{\item{
+      #1
+    }}
+  \end{itemize}
+}
+
+\newcommand{\cvSkillsCategory}[2]{
+  \textbf{#1}{: #2}\\
+}
+
+\newcommand{\cvSkillsItem}[2]{
+  \href{#2}{#1}
+}
+
+
+\newcommand{\cvMain}[7]
+{
+\begin{document}
+  \fontfamily{cmr}\selectfont
+  \header
+  #1
+  \vspace{2mm}
+  #2
+  \vspace{2mm}
+  #3
+  \vspace{2mm}
+  #4
+  \vspace{2mm}
+  #5
+  \vspace{2mm}
+  #6
+  \vspace{2mm}
+  #7
+  \vspace{2mm}
+\end{document}
+}
