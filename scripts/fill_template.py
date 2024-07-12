@@ -1,8 +1,11 @@
+from typing import Protocol
 from distutils.dir_util import copy_tree, remove_tree
+import click
+import requests
+from dataclasses import dataclass
 import json
 from pathlib import Path
 import jinja2
-
 
 PROJECT_FOLDER = Path(__file__).parent.parent
 TEMPLATE_FOLDER = PROJECT_FOLDER / "template"
@@ -11,7 +14,31 @@ CONTENT_FOLDER = "content"
 TARGET_FOLDER = PROJECT_FOLDER / "target"
 
 DATA_OBJECT_NAME = "data"
-DATA_OBJECT_FILE = PROJECT_FOLDER / "data.json"
+
+
+class IDataLoader(Protocol):
+    def load(self) -> dict:
+        raise NotImplementedError
+
+
+@dataclass
+class FileDataLoader(IDataLoader):
+    filepath: Path
+
+    def load(self) -> dict:
+        if not self.filepath.exists():
+            raise FileNotFoundError(f"{self.filepath} not found")
+
+        return json.loads(self.filepath.read_text())
+
+
+@dataclass
+class HttpDataLoader(IDataLoader):
+    url: str
+
+    def load(self) -> dict:
+        response = requests.get(self.url)
+        return response.json()
 
 
 class LaTeXEnvironment(jinja2.Environment):
@@ -37,11 +64,11 @@ class NotLaTeXFileError(ValueError):
         super().__init__(f"{path} is not LaTeX file")
 
 
-def is_latex_file(filepath: Path):
+def is_latex_file(filepath: Path) -> bool:
     return filepath.suffix.lower() == ".tex"
 
 
-def fill_content_file(path: Path, data: dict):
+def fill_content_file(path: Path, data: dict) -> None:
     if not is_latex_file(path):
         raise NotLaTeXFileError(path)
 
@@ -52,7 +79,7 @@ def fill_content_file(path: Path, data: dict):
     path.write_text(res)
 
 
-def fill_content_folder(path: Path, data: dict):
+def fill_content_folder(path: Path, data: dict) -> None:
     if not (path.exists() and path.is_dir()):
         raise ValueError(f"{path} is not exists or not a directory")
 
@@ -63,21 +90,30 @@ def fill_content_folder(path: Path, data: dict):
             print(f"Skipping {e}")
 
 
-def prepare_target_folder(src: Path, dist: Path):
+def prepare_target_folder(src: Path, dist: Path) -> None:
     if dist.exists() and dist.is_dir():
         remove_tree(dist)
     copy_tree(str(src), str(dist))
 
 
-def load_data_from_file(filepath: Path):
-    if not filepath.exists():
-        raise FileNotFoundError(f"{filepath} not found")
+@click.command()
+@click.option(
+    "-f", "--file", "filepath", type=click.Path(exists=True), help="Path to the file"
+)
+@click.option("-u", "--url", "url", type=click.STRING, help="URL of the web page")
+def main(filepath: str, url: str) -> None:
+    if filepath and url:
+        raise click.UsageError(
+            "You can't use both --file and --url options at the same time."
+        )
+    elif not filepath and not url:
+        raise click.UsageError("You must specify either --file or --url option.")
+    elif filepath:
+        data_loader = FileDataLoader(Path(filepath))
+    elif url:
+        data_loader = HttpDataLoader(url)
 
-    return json.loads(filepath.read_text())
-
-
-def main():
-    data = load_data_from_file(DATA_OBJECT_FILE)
+    data = data_loader.load()
     data = {DATA_OBJECT_NAME: data}
     prepare_target_folder(TEMPLATE_FOLDER, TARGET_FOLDER)
     fill_content_folder(TARGET_FOLDER / CONTENT_FOLDER, data)
