@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        REPO_DATA_URL = 'git@github.com:blackgolyb/about_me.git'
+        REPO_DATA_URL = 'https://github.com/blackgolyb/cv.git'
         REPO_DATA_BRANCH = 'main'
     }
 
@@ -14,7 +14,7 @@ pipeline {
         stage('Checkout Repo DATA') {
             steps {
                 dir('.__src__') {
-                    git credentialsId: "github-ssh-key", branch: "${REPO_DATA_BRANCH}", url: "${REPO_DATA_URL}"
+                    git branch: "${REPO_DATA_BRANCH}", url: "${REPO_DATA_URL}"
                 }
             }
         }
