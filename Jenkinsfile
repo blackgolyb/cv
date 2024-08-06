@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        REPO_SOURCE_URL = 'https://github.com/blackgolyb/about_me.git'
-        REPO_SOURCE_BRANCH = 'main'
+        REPO_DATA_URL = 'git@github.com:blackgolyb/about_me.git'
+        REPO_DATA_BRANCH = 'main'
     }
 
     triggers {
@@ -11,24 +11,24 @@ pipeline {
     }
 
     stages {
-        stage('test') {
+        stage('Checkout Repo DATA') {
             steps {
-                script {
-                    sh 'ls -la'
+                dir('.__src__') {
+                    git credentialsId: "github-ssh-key", branch: "${REPO_DATA_BRANCH}", url: "${REPO_DATA_URL}"
                 }
             }
         }
-        stage('Checkout Repo SOURCE') {
+        stage('Fill cv template') {
             steps {
-                dir('.src') {
-                    git branch: "${REPO_SOURCE_BRANCH}", url: "${REPO_SOURCE_URL}"
+                script {
+                    sh './scripts/fill_template.sh'
                 }
             }
         }
-        stage('Build new cv vervion') {
+        stage('Publish new cv version') {
             steps {
                 script {
-                    sh 'ls -la'
+                    sh './scripts/publish_target.sh'
                 }
             }
         }
