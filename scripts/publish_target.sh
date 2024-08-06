@@ -4,7 +4,7 @@
 set -e
 
 # Задаємо змінні
-TARGET_DIR="target"
+BUILD_DIR="build"
 BRANCH="release"
 TAG_PREFIX="v"
 
@@ -12,9 +12,9 @@ TAG_PREFIX="v"
 # Перехід до теки з вашим репозиторієм
 REPO_DIR=$(git rev-parse --show-toplevel)
 cd $REPO_DIR || { echo "Тека репозиторію не знайдена!"; exit 1; }
-TARGET_DIR="$REPO_DIR/$TARGET_DIR"
+BUILD_DIR="$REPO_DIR/$BUILD_DIR"
 
-# Створення нової тимчасової теки для target
+# Створення нової тимчасової теки для build
 TEMP_DIR=$(mktemp -d)
 
 # Ініціалізація нового git репозиторію у тимчасовій теці
@@ -29,11 +29,11 @@ git fetch origin $BRANCH
 git fetch --tags 
 git checkout -b $BRANCH -f origin/$BRANCH
 
-# Копіювання вмісту теки target до тимчасової теки
+# Копіювання вмісту теки build до тимчасової теки
 git rm -rf .
-cp -rT $TARGET_DIR $TEMP_DIR
+cp -rT $BUILD_DIR $TEMP_DIR
 
-# Додавання змін з теки target
+# Додавання змін з теки build
 git add .
 
 # Перевірка, чи є що комітити

@@ -1,4 +1,5 @@
 target
+build
 .venv
 poetry.lock
 data.json

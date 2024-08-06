@@ -4,5 +4,5 @@
 ## freeze dependencies
 
 ```sh
-poetry export --without-hashes --format=requirements.txt > requirements.txt
+poetry export --only main --without-hashes --format=requirements.txt > requirements.txt
 ```

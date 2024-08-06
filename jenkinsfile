@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+
+    environment {
+        REPO_SOURCE_URL = 'git@github.com:blackgolyb/about_me.git'
+        REPO_DIST_URL = 'git@github.com:blackgolyb/cv.git'
+        REPO_SOURCE_BRANCH = 'main'
+        REPO_DIST_BRANCH = 'main'
+    }
+
+    triggers {
+        pollSCM('* * * * *')
+    }
+
+    stages {
+        stage('Checkout Repo SOURCE') {
+            steps {
+                dir('src') {
+                    git branch: "${REPO_SOURCE_BRANCH}", url: "${REPO_SOURCE_URL}"
+                }
+            }
+        }
+        stage('Checkout Repo DIST') {
+            steps {
+                dir('dist') {
+                    git branch: "${REPO_DIST_BRANCH}", url: "${REPO_DIST_URL}"
+                }
+            }
+        }
+        stage('Build new cv vervion') {
+            steps {
+                dir('dist') {
+                    script {
+                        sh 'ls -la'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
+    }
+}

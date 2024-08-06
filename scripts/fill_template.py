@@ -1,17 +1,18 @@
-from typing import Protocol
-from distutils.dir_util import copy_tree, remove_tree
-import click
-import requests
-from dataclasses import dataclass
 import json
+from dataclasses import dataclass
+from distutils.dir_util import copy_tree, remove_tree
 from pathlib import Path
+from typing import Protocol
+
+import click
 import jinja2
+import requests
 
 PROJECT_FOLDER = Path(__file__).parent.parent
 TEMPLATE_FOLDER = PROJECT_FOLDER / "template"
 CONTENT_FOLDER = "content"
 
-TARGET_FOLDER = PROJECT_FOLDER / "target"
+BUILD_FOLDER = PROJECT_FOLDER / "build"
 
 DATA_OBJECT_NAME = "data"
 
@@ -90,7 +91,7 @@ def fill_content_folder(path: Path, data: dict) -> None:
             print(f"Skipping {e}")
 
 
-def prepare_target_folder(src: Path, dist: Path) -> None:
+def prepare_build_folder(src: Path, dist: Path) -> None:
     if dist.exists() and dist.is_dir():
         remove_tree(dist)
     copy_tree(str(src), str(dist))
@@ -115,8 +116,8 @@ def main(filepath: str, url: str) -> None:
 
     data = data_loader.load()
     data = {DATA_OBJECT_NAME: data}
-    prepare_target_folder(TEMPLATE_FOLDER, TARGET_FOLDER)
-    fill_content_folder(TARGET_FOLDER / CONTENT_FOLDER, data)
+    prepare_build_folder(TEMPLATE_FOLDER, BUILD_FOLDER)
+    fill_content_folder(BUILD_FOLDER / CONTENT_FOLDER, data)
 
 
 if __name__ == "__main__":
