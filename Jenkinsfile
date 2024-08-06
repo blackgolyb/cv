@@ -21,6 +21,7 @@ pipeline {
         stage('Fill cv template') {
             steps {
                 dir('scripts') {
+                    sh('chmod +x ./fill_template.sh')
                     sh('./fill_template.sh')
                 }
             }
@@ -28,7 +29,8 @@ pipeline {
         stage('Publish new cv version') {
             steps {
                 dir('scripts') {
-                    sh('./scripts/publish_target.sh')
+                    sh('chmod +x ./publish_target.sh')
+                    sh('./publish_target.sh')
                 }
             }
         }
