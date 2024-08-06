@@ -3,7 +3,7 @@ build
 .venv
 poetry.lock
 data.json
-
+.__src__
 
 # LaTeX auxiliary files
 *.aux
