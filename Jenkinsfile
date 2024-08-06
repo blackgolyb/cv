@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        REPO_DATA_URL = 'https://github.com/blackgolyb/cv.git'
+        REPO_DATA_URL = 'https://github.com/blackgolyb/about_me.git'
         REPO_DATA_BRANCH = 'main'
     }
 
