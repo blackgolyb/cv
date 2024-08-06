@@ -13,6 +13,13 @@ pipeline {
     }
 
     stages {
+        stage('test') {
+            steps {
+                script {
+                    sh 'ls -la'
+                }
+            }
+        }
         stage('Checkout Repo SOURCE') {
             steps {
                 dir('src') {
