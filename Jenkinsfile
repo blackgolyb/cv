@@ -22,24 +22,15 @@ pipeline {
         }
         stage('Checkout Repo SOURCE') {
             steps {
-                dir('src') {
-                    git branch: "${REPO_SOURCE_BRANCH}", url: "${REPO_SOURCE_URL}"
-                }
-            }
-        }
-        stage('Checkout Repo DIST') {
-            steps {
-                dir('dist') {
-                    git branch: "${REPO_DIST_BRANCH}", url: "${REPO_DIST_URL}"
+                dir('.src') {
+                    git credentialsId: "github-ssh-key", branch: "${REPO_SOURCE_BRANCH}", url: "${REPO_SOURCE_URL}"
                 }
             }
         }
         stage('Build new cv vervion') {
             steps {
-                dir('dist') {
-                    script {
-                        sh 'ls -la'
-                    }
+                script {
+                    sh 'ls -la'
                 }
             }
         }
