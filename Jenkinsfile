@@ -20,15 +20,15 @@ pipeline {
         }
         stage('Fill cv template') {
             steps {
-                script {
-                    sh './scripts/fill_template.sh'
+                dir('scripts') {
+                    sh('./fill_template.sh')
                 }
             }
         }
         stage('Publish new cv version') {
             steps {
-                script {
-                    sh './scripts/publish_target.sh'
+                dir('scripts') {
+                    sh('./scripts/publish_target.sh')
                 }
             }
         }
