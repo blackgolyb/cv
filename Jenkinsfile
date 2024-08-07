@@ -56,7 +56,9 @@ pipeline {
             steps {
                 dir('__src__/scripts') {
                     sh('chmod +x ./publish_target.sh')
-                    sh('./publish_target.sh')
+                    sshagent (credentials: ['github-ssh-key']) {
+                        sh('./publish_target.sh')
+                    }
                 }
             }
         }
