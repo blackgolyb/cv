@@ -1,14 +1,18 @@
 pipeline {
     agent any
 
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '5'))
+    }
+
     environment {
         REPO_DATA_URL = 'https://github.com/blackgolyb/about_me.git'
         REPO_DATA_BRANCH = 'main'
     }
 
-    triggers {
-        pollSCM('* * * * *')
-    }
+    // triggers {
+    //     pollSCM('* * * * *')
+    // }
 
     stages {
         stage('Checkout Repo DATA') {
