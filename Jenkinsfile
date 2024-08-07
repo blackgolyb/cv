@@ -11,7 +11,7 @@ pipeline {
 
     environment {
         REPO_DATA = 'https://github.com/blackgolyb/about_me.git'
-        REPO_SRC = 'https://github.com/blackgolyb/cv.git'
+        REPO_SRC = 'git@github.com:blackgolyb/cv.git'
     }
 
     stages {
@@ -29,7 +29,7 @@ pipeline {
                     
                     // Перевіряємо зміни в другому репозиторії
                     dir('__src__') {
-                        git url: "${REPO_SRC}", branch: 'main'
+                        git url: "${REPO_SRC}", branch: 'main', credentialsId: "github-ssh-key"
                         changesInRepo2 = sh(returnStatus: true, script: 'git diff --name-only HEAD~1') != 0
                     }
                     
@@ -42,7 +42,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Fill cv template') {
             steps {
                 dir('__src__/scripts') {
