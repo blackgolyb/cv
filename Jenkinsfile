@@ -35,7 +35,9 @@ pipeline {
                     
                     // Якщо змін немає, завершуємо пайплайн
                     if (!changesInRepo1 && !changesInRepo2) {
-                        abort('No changes detected. Stopping pipeline.')
+                        echo "No changes detected. Stopping pipeline."
+                        currentBuild.result = 'ABORTED'
+                        error('No changes detected. Stopping pipeline.')
                     }
                 }
             }
