@@ -25,7 +25,7 @@ pipeline {
 
                     // Перевіряємо зміни в другому репозиторії
                     dir('__src__') {
-                        checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: "${REPO_DATA}"]], credentialsId: 'github-ssh-key'])
+                        checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: "${REPO_SRC}"]], credentialsId: 'github-ssh-key'])
                     }
 
                     def changesInData = currentBuild.changeSets[0]?.items?.length > 0
