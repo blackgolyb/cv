@@ -6,7 +6,7 @@ pipeline {
     }
 
     triggers {
-        pollSCM('H/5 * * * *')
+        pollSCM('* * * * *')
     }
 
     environment {
@@ -26,16 +26,6 @@ pipeline {
                     // Перевіряємо зміни в другому репозиторії
                     dir('__src__') {
                         checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: "${REPO_SRC}", credentialsId: 'github-ssh-key']]])
-                    }
-
-                    def changesInData = currentBuild.changeSets[0]?.items?.length > 0
-                    def changesInSrc = currentBuild.changeSets[1]?.items?.length > 0
-
-                    // Якщо змін немає, завершуємо пайплайн
-                    if (!changesInData && !changesInSrc) {
-                        echo 'No changes detected. Stopping pipeline.'
-                        currentBuild.result = 'ABORTED'
-                        error('No changes detected. Stopping pipeline.')
                     }
                 }
             }
