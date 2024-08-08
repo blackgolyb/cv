@@ -18,24 +18,22 @@ pipeline {
         stage('Check Repositories') {
             steps {
                 script {
-                    def changesInRepo1 = false
-                    def changesInRepo2 = false
-                    
                     // Перевіряємо зміни в першому репозиторії
                     dir('__data__') {
-                        git url: "${REPO_DATA}", branch: 'main'
-                        changesInRepo1 = sh(returnStatus: true, script: 'git diff --name-only HEAD~1') != 0
+                        checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: "${REPO_DATA}"]]])
                     }
-                    
+
                     // Перевіряємо зміни в другому репозиторії
                     dir('__src__') {
-                        git url: "${REPO_SRC}", branch: 'main', credentialsId: "github-ssh-key"
-                        changesInRepo2 = sh(returnStatus: true, script: 'git diff --name-only HEAD~1') != 0
+                        checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: "${REPO_DATA}"]], credentialsId: 'github-ssh-key'])
                     }
-                    
+
+                    def changesInData = currentBuild.changeSets[0]?.items?.length > 0
+                    def changesInSrc = currentBuild.changeSets[1]?.items?.length > 0
+
                     // Якщо змін немає, завершуємо пайплайн
-                    if (!changesInRepo1 && !changesInRepo2) {
-                        echo "No changes detected. Stopping pipeline."
+                    if (!changesInData && !changesInSrc) {
+                        echo 'No changes detected. Stopping pipeline.'
                         currentBuild.result = 'ABORTED'
                         error('No changes detected. Stopping pipeline.')
                     }
@@ -56,7 +54,7 @@ pipeline {
             steps {
                 dir('__src__/scripts') {
                     sh('chmod +x ./publish_target.sh')
-                    sshagent (credentials: ['github-ssh-key']) {
+                    sshagent(credentials: ['github-ssh-key']) {
                         sh('./publish_target.sh')
                     }
                 }
