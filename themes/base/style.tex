@@ -19,6 +19,7 @@
 \usepackage{multicol}
 \usepackage{graphicx}
 \usepackage{cfr-lm}
+\usepackage{parcolumns}
 \usepackage[T1]{fontenc}
 \setlength{\footskip}{4.08003pt} 
 \pagestyle{fancy}
@@ -59,6 +60,14 @@
 
 %-------------------------
 % Custom commands
+
+\newlist{commalist}{description*}{4}
+\setlist[commalist]{
+  mode=unboxed,
+  itemjoin={\unskip\kern-.3em{, }},
+  afterlabel=\unskip
+}
+
 \newcommand{\resumeItem}[2]{
   \item{
     \textbf{#1}{\hspace{0.5mm}#2 \vspace{-0.5mm}}
@@ -147,7 +156,7 @@
 }
 
 \newcommand{\cvContactsItem}[3]{
-  \item{\href{#3}{\raisebox{0.0\height}{\footnotesize #1}\ {#2}}}
+  \item{\underline{\href{#3}{\raisebox{0.0\height}{\footnotesize #1}\ {#2}}}}
 }
 
 
@@ -170,7 +179,11 @@
   \cvSectionItem{#1}{#2}{#3}{#4}
   \vspace{-2.0mm}
   \resumeItemListStart
-    \cvExperienceItemDescription{\textbf{Technologies}: #6}
+    \cvExperienceItemDescription{
+      \textbf{Technologies}: \begin{commalist}
+        #6
+      \end{commalist}
+    }
     #5
   \resumeItemListEnd
   \vspace{-3.0mm}
@@ -181,7 +194,7 @@
 }
 
 \newcommand{\cvExperienceItemTechnology}[1]{
-  #1
+  \item #1
 }
 
 
@@ -191,10 +204,14 @@
 }
 
 \newcommand{\cvProjectsItem}[6]{
-  \cvSectionItem{#1}{#2}{#3}{}
+  \cvSectionItem{#1}{#2}{#3}{\href{#4}{\underline{\textbf{GitHub}}}}
   \vspace{-2.0mm}
   \resumeItemListStart
-    \cvProjectsItemDescription{\textbf{Technologies}: #6}
+    \cvProjectsItemDescription{
+      \textbf{Technologies}: \begin{commalist}
+        #6
+      \end{commalist}
+    }
     #5
   \resumeItemListEnd
   \vspace{-3.0mm}
@@ -205,25 +222,33 @@
 }
 
 \newcommand{\cvProjectsItemTechnology}[1]{
-  #1
+  \item #1
 }
 
 
-\newcommand{\cvSkills}[1]{
+\newcommand{\cvSkills}[2]{
   \cvSection{Skills}
-  \begin{itemize}[leftmargin=0.1in, label={}]
-    \small{\item{
-      #1
-    }}
-  \end{itemize}
+  \vspace{-1em}
+  \begin{parcolumns}[nofirstindent=true]{#1}
+    #2
+  \end{parcolumns}
+}
+
+\newcommand{\itemBox}[1]{
+  \makebox[0pt][l]{\raggedright #1}
 }
 
 \newcommand{\cvSkillsCategory}[2]{
-  \textbf{#1}{: #2}\\
+  \colchunk{
+    \begin{itemize}[leftmargin=*]
+      \item[] \itemBox{\textbf{#1}}
+      #2
+    \end{itemize}
+  }
 }
 
 \newcommand{\cvSkillsItem}[2]{
-  \href{#2}{#1}
+  \item \itemBox{\href{#2}{#1}}
 }
 
 
@@ -233,18 +258,17 @@
   \fontfamily{cmr}\selectfont
   \header
   #1
-  \vspace{2mm}
+  % \vspace{2mm}
   #2
-  \vspace{2mm}
+  % \vspace{2mm}
   #3
-  \vspace{2mm}
+  % \vspace{2mm}
   #4
-  \vspace{2mm}
+  % \vspace{2mm}
   #5
-  \vspace{2mm}
+  % \vspace{2mm}
   #6
-  \vspace{2mm}
+  % \vspace{2mm}
   #7
-  \vspace{2mm}
 \end{document}
 }
