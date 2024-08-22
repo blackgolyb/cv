@@ -14,8 +14,8 @@ jobs:
         with:
           root_file: main.tex
       - name: Rename PDF
-        run: mv main.pdf Omelnitskyi_Andrii_CV.pdf
+        run: mv main.pdf CV_Omelnitskyi_Andrii_Python_Developer.pdf
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          files: Omelnitskyi_Andrii_CV.pdf
+          files: CV_Omelnitskyi_Andrii_Python_Developer.pdf
