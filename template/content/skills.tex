@@ -1,4 +1,6 @@
-\cvSkills{
+\cvSkills
+{\VAR{ data.skills|length }}
+{
   \BLOCK{ for category in data.skills }
     \cvSkillsCategory{\VAR{ category.name }}{
       \BLOCK{ for skill in category.skills }

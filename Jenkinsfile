@@ -6,7 +6,7 @@ pipeline {
     }
 
     triggers {
-        pollSCM('H/30 * * * *')
+        pollSCM('H/10 * * * *')
     }
 
     environment {
@@ -20,12 +20,18 @@ pipeline {
                 script {
                     // Перевіряємо зміни в першому репозиторії
                     dir('__data__') {
-                        checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: "${REPO_DATA}"]]])
+                        checkout(
+                            [$class: 'GitSCM', branches: [[name: '*/main']],
+                            userRemoteConfigs: [[url: "${REPO_DATA}"]]]
+                        )
                     }
 
                     // Перевіряємо зміни в другому репозиторії
                     dir('__src__') {
-                        checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: "${REPO_SRC}", credentialsId: 'github-ssh-key']]])
+                        checkout(
+                            [$class: 'GitSCM', branches: [[name: '*/main']],
+                            userRemoteConfigs: [[url: "${REPO_SRC}", credentialsId: 'github-ssh-key']]]
+                        )
                     }
                 }
             }
