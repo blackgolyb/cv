@@ -1,0 +1,10 @@
+version: "3.0"
+services:
+    texlive:
+        container_name: LaTeX
+        image: texlive/texlive:latest
+        volumes:
+            - ${SRC_FOLDER}:/cv
+            - ${BUILD_FOLDER}:/build
+        working_dir: /cv
+        command: bash -c "mkdir -p /build && ${LATEX_PROGRAM} ${LATEX_ARGS} -output-directory=/build main.tex"
