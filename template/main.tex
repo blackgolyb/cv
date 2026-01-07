@@ -1,5 +1,4 @@
-% change this to switch the theme. (themes stores in themes folder)
-\newcommand{\theme}{base}
+\input{settings.tex}
 
 \makeatletter
 \def\input@path{{./themes/\theme/}}
@@ -7,7 +6,7 @@
 \documentclass{cv}
 
 
-\input{preamble.tex}
+\input{core/preamble.tex}
 \input{themes/\theme/style.tex}
 \input{content/data.tex}
 
@@ -15,8 +14,8 @@
 \cvMain
   {\input{content/contacts.tex}}
   {\input{content/skills.tex}}
-  {\input{content/projects.tex}}
   {\input{content/experiences.tex}}
+  {\input{content/projects.tex}}
   {\input{content/education.tex}}
   {\input{content/achievements.tex}}
   {\input{content/publications.tex}}
