@@ -1,20 +1,33 @@
 import json
+import shutil
 from dataclasses import dataclass
-from distutils.dir_util import copy_tree, remove_tree
 from pathlib import Path
 from typing import Protocol
 
 import click
 import jinja2
 import requests
+from pydantic_settings import BaseSettings
 
-PROJECT_FOLDER = Path(__file__).parent.parent
-TEMPLATE_FOLDER = PROJECT_FOLDER / "template"
-CONTENT_FOLDER = "content"
+PROJECT_DIR = Path(__file__).parent.parent
 
-BUILD_FOLDER = PROJECT_FOLDER / "build"
 
-DATA_OBJECT_NAME = "data"
+class Settings(BaseSettings):
+    content_dir: str = "content"
+    data_object_name: str = "data"
+    project_dir: Path = PROJECT_DIR
+
+    @property
+    def template_dir(self) -> Path:
+        return self.project_dir / "template"
+
+    @property
+    def build_dir(self) -> Path:
+        return self.project_dir / "build" / "src"
+
+    @property
+    def config_file(self) -> Path:
+        return self.project_dir / ".config"
 
 
 class IDataLoader(Protocol):
@@ -44,11 +57,11 @@ class HttpDataLoader(IDataLoader):
 
 class LaTeXEnvironment(jinja2.Environment):
     default_config = {
-        "block_start_string": "\BLOCK{",
+        "block_start_string": "\\BLOCK{",
         "block_end_string": "}",
-        "variable_start_string": "\VAR{",
+        "variable_start_string": "\\VAR{",
         "variable_end_string": "}",
-        "comment_start_string": "\#{",
+        "comment_start_string": "\\#{",
         "comment_end_string": "}",
         "line_statement_prefix": "%%",
         "line_comment_prefix": "%#",
@@ -69,44 +82,44 @@ def is_latex_file(filepath: Path) -> bool:
     return filepath.suffix.lower() == ".tex"
 
 
-def fill_content_file(path: Path, data: dict) -> None:
-    if not is_latex_file(path):
-        raise NotLaTeXFileError(path)
+def fill_template_file(template_file: Path, template_args: dict) -> None:
+    if not is_latex_file(template_file):
+        raise NotLaTeXFileError(template_file)
 
-    content = path.read_text()
+    content = template_file.read_text()
     env = LaTeXEnvironment()
     template = env.from_string(content)
-    res = template.render(data=data["data"])
-    path.write_text(res)
+    res = template.render(template_args)
+    template_file.write_text(res)
 
 
-def fill_content_folder(path: Path, data: dict) -> None:
-    if not (path.exists() and path.is_dir()):
-        raise ValueError(f"{path} is not exists or not a directory")
+def fill_all_template_files_in_directory(template_dir: Path, template_args: dict) -> None:
+    if not (template_dir.exists() and template_dir.is_dir()):
+        raise ValueError(f"{template_dir} is not exists or not a directory")
 
-    for template_file in path.iterdir():
+    for template_file in template_dir.iterdir():
         try:
-            fill_content_file(template_file, data)
+            fill_template_file(template_file, template_args)
         except NotLaTeXFileError as e:
             print(f"Skipping {e}")
 
 
-def prepare_build_folder(src: Path, dist: Path) -> None:
+def copy_filetree_from_scratch(src: Path, dist: Path) -> None:
     if dist.exists() and dist.is_dir():
-        remove_tree(dist)
-    copy_tree(str(src), str(dist))
+        shutil.rmtree(dist)
+    shutil.copytree(src, dist)
+
+
+def load_settings() -> Settings:
+    return Settings()
 
 
 @click.command()
-@click.option(
-    "-f", "--file", "filepath", type=click.Path(exists=True), help="Path to the file"
-)
+@click.option("-f", "--file", "filepath", type=click.Path(exists=True), help="Path to the file")
 @click.option("-u", "--url", "url", type=click.STRING, help="URL of the web page")
 def main(filepath: str, url: str) -> None:
     if filepath and url:
-        raise click.UsageError(
-            "You can't use both --file and --url options at the same time."
-        )
+        raise click.UsageError("You can't use both --file and --url options at the same time.")
     elif not filepath and not url:
         raise click.UsageError("You must specify either --file or --url option.")
     elif filepath:
@@ -114,10 +127,17 @@ def main(filepath: str, url: str) -> None:
     elif url:
         data_loader = HttpDataLoader(url)
 
+    settings = load_settings()
+
     data = data_loader.load()
-    data = {DATA_OBJECT_NAME: data}
-    prepare_build_folder(TEMPLATE_FOLDER, BUILD_FOLDER)
-    fill_content_folder(BUILD_FOLDER / CONTENT_FOLDER, data)
+    data = {settings.data_object_name: data}
+
+    copy_filetree_from_scratch(settings.template_dir, settings.build_dir)
+
+    shutil.copy(settings.config_file, settings.build_dir)
+
+    content_dir_in_build_folder = settings.build_dir / settings.content_dir
+    fill_all_template_files_in_directory(content_dir_in_build_folder, data)
 
 
 if __name__ == "__main__":

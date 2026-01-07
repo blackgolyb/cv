@@ -26,7 +26,7 @@ git remote add origin $(git -C $REPO_DIR config --get remote.origin.url)
 
 # Витягування гілки release
 git fetch origin $BRANCH
-git fetch --tags 
+git fetch --tags
 git checkout -b $BRANCH -f origin/$BRANCH
 
 # Копіювання вмісту теки build до тимчасової теки
