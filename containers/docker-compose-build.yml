@@ -7,4 +7,6 @@ services:
             - ${SRC_FOLDER}:/cv
             - ${BUILD_FOLDER}:/build
         working_dir: /cv
-        command: bash -c "mkdir -p /build && ${LATEX_PROGRAM} ${LATEX_ARGS} -output-directory=/build main.tex"
+        env_file:
+            - ${SRC_FOLDER}/.config
+        command: bash -c "mkdir -p /build && ${LATEX_PROGRAM} ${LATEX_ARGS} -output-directory=/build main.tex && mv /build/main.pdf /build/$${RESULT_FILENAME}.pdf"

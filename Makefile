@@ -26,7 +26,7 @@ export LATEX_PROGRAM
 export LATEX_ARGS
 
 
-all: fill build post_build
+all: fill build
 
 pre_fill:
 	rm -rf ${BUILD_FOLDER} && mkdir -p ${BUILD_FOLDER}
@@ -34,17 +34,14 @@ pre_fill:
 fill: pre_fill
 	BUILD_DIR=${SRC_FOLDER} sh ${PROJECT_DIR}/scripts/fill_template.sh ${FILE}
 
-publish: all
-	cp ${BUILD_FOLDER}/${CV_FILE_NAME}.pdf ${PROJECT_DIR}/published/${CV_FILE_NAME}.pdf
-
-post_build:
-	mv ${BUILD_FOLDER}/main.pdf ${BUILD_FOLDER}/${CV_FILE_NAME}.pdf
-
 build:
 	docker compose -f ${PROJECT_DIR}/containers/docker-compose-build.yml up
 
 compile_container: write_settings
 	docker compose -f ${PROJECT_DIR}/containers/docker-compose-build.yml build
+
+publish: all
+	cp ${BUILD_FOLDER}/${CV_FILE_NAME}.pdf ${PROJECT_DIR}/published/${CV_FILE_NAME}.pdf
 
 
 .PHONY: all build compile_container write_settings

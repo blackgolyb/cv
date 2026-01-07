@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     content_dir: str = "content"
     data_object_name: str = "data"
     project_dir: Path = PROJECT_DIR
+    cv_file_name: str
     build_dir: Path
 
     @property
@@ -25,7 +26,7 @@ class Settings(BaseSettings):
 
     @property
     def config_file(self) -> Path:
-        return self.project_dir / ".config"
+        return self.build_dir / ".config"
 
     @property
     def settings_file(self) -> Path:
@@ -112,7 +113,21 @@ def copy_filetree_from_scratch(src: Path, dist: Path) -> None:
     shutil.copytree(src, dist)
 
 
-def write_settings_file(settings: Settings):
+def prepare_filename_for_path(filename: str) -> str:
+    return filename.replace(" ", "_").replace("/", "_")
+
+
+def fill_config_file(settings: Settings, data: dict) -> None:
+    allowed_keys = ("lastName", "firstName", "position", "city")
+    cv_file_name = settings.cv_file_name.format(
+        **{key: prepare_filename_for_path(data.get(key, "")) for key in allowed_keys}
+    )
+    content = f"RESULT_FILENAME={cv_file_name}\n"
+    with settings.config_file.open("w") as f:
+        f.write(content)
+
+
+def fill_settings_file(settings: Settings):
     content = f"\\newcommand{{\\theme}}{{{settings.theme}}}\n"
     with settings.settings_file.open("w") as f:
         f.write(content)
@@ -138,15 +153,14 @@ def main(filepath: str, url: str) -> None:
     settings = load_settings()
 
     data = data_loader.load()
-    data = {settings.data_object_name: data}
+    dataForRenderer = {settings.data_object_name: data}
 
     copy_filetree_from_scratch(settings.template_dir, settings.build_dir)
 
-    shutil.copy(settings.config_file, settings.build_dir)
-
     content_dir_in_build_folder = settings.build_dir / settings.content_dir
-    fill_all_template_files_in_directory(content_dir_in_build_folder, data)
-    write_settings_file(settings)
+    fill_all_template_files_in_directory(content_dir_in_build_folder, dataForRenderer)
+    fill_settings_file(settings)
+    fill_config_file(settings, data)
 
 
 if __name__ == "__main__":

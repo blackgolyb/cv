@@ -18,8 +18,8 @@ jobs:
               with:
                   root_file: main.tex
             - name: Rename PDF
-              run: mv main.pdf ${{ env.CV_FILE_NAME }}.pdf
+              run: mv main.pdf ${{ env.RESULT_FILENAME }}.pdf
             - name: Release
               uses: softprops/action-gh-release@v2
               with:
-                  files: ${{ env.CV_FILE_NAME }}.pdf
+                  files: ${{ env.RESULT_FILENAME }}.pdf
