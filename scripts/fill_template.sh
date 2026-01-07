@@ -10,7 +10,6 @@ set +o allexport
 URL="https://raw.githubusercontent.com/${GITHUB_USER}/${REPO_DATA}/main/${DATA_FILE}"
 PYTHON="$REPO_DIR/.venv/bin/python"
 
-
 if [ $# -eq 0 ]; then
     $PYTHON $REPO_DIR/scripts/fill_template.py -u $URL
 else

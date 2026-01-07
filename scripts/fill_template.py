@@ -13,21 +13,23 @@ PROJECT_DIR = Path(__file__).parent.parent
 
 
 class Settings(BaseSettings):
+    theme: str = "base"
     content_dir: str = "content"
     data_object_name: str = "data"
     project_dir: Path = PROJECT_DIR
+    build_dir: Path
 
     @property
     def template_dir(self) -> Path:
         return self.project_dir / "template"
 
     @property
-    def build_dir(self) -> Path:
-        return self.project_dir / "build" / "src"
-
-    @property
     def config_file(self) -> Path:
         return self.project_dir / ".config"
+
+    @property
+    def settings_file(self) -> Path:
+        return self.build_dir / "settings.tex"
 
 
 class IDataLoader(Protocol):
@@ -110,6 +112,12 @@ def copy_filetree_from_scratch(src: Path, dist: Path) -> None:
     shutil.copytree(src, dist)
 
 
+def write_settings_file(settings: Settings):
+    content = f"\\newcommand{{\\theme}}{{{settings.theme}}}\n"
+    with settings.settings_file.open("w") as f:
+        f.write(content)
+
+
 def load_settings() -> Settings:
     return Settings()
 
@@ -138,6 +146,7 @@ def main(filepath: str, url: str) -> None:
 
     content_dir_in_build_folder = settings.build_dir / settings.content_dir
     fill_all_template_files_in_directory(content_dir_in_build_folder, data)
+    write_settings_file(settings)
 
 
 if __name__ == "__main__":
