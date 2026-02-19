@@ -1,0 +1,49 @@
+# Python cache and virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv/
+venv/
+ENV/
+env/
+
+# Build artifacts
+build/
+*.pdf
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Ruff cache
+.ruff_cache/
+
+# Documentation
+README.md
+containers/README.md
+Jenkinsfile
+
+# Make and config (these are copied explicitly)
+Makefile
+
+# Temporary files
+*.tmp
+*.bak
+.DS_Store
+Thumbs.db
