@@ -1,0 +1,100 @@
+name: Compile CV
+
+on:
+  # Manual trigger via GitHub UI
+  workflow_dispatch:
+    inputs:
+      data_source:
+        description: "Data source (url or file)"
+        required: false
+        default: "url"
+        type: choice
+        options:
+          - url
+          - file
+
+  # External webhook trigger
+  repository_dispatch:
+    types: [compile-cv]
+
+  # Trigger on push to main branch
+  push:
+    branches:
+      - main
+    paths:
+      - "data.json"
+      - "template/**"
+      - "scripts/**"
+      - ".config"
+
+  # Trigger after Docker image is published
+  workflow_run:
+    workflows: ["Build and Publish Docker Image"]
+    types:
+      - completed
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull Docker image
+        run: |
+          docker pull ghcr.io/${{ github.repository_owner }}/cv-generator:latest
+          docker tag ghcr.io/${{ github.repository_owner }}/cv-generator:latest cv-generator
+
+      - name: Create build directory
+        run: |
+          mkdir -p build
+          chmod 777 build
+
+      - name: Compile CV
+        run: |
+          make build
+        env:
+          OUTPUT_FOLDER: ${{ github.workspace }}/build
+          CONFIG_FILE: ${{ github.workspace }}/.config
+
+      - name: List generated files
+        run: |
+          echo "Generated files:"
+          ls -lah build/
+
+      - name: Create or Update Latest Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: Latest CV Build
+          body: |
+            **Latest CV Build**
+
+            - **Commit**: ${{ github.sha }}
+            - **Build Date**: ${{ github.event.head_commit.timestamp }}
+            - **Triggered by**: ${{ github.event_name }}
+
+            This release is automatically updated with each successful CV compilation.
+          files: build/*.pdf
+          fail_on_unmatched_files: true
+          prerelease: false
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload build log as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log-${{ github.sha }}
+          path: build.log
+          if-no-files-found: warn
+          retention-days: 7
