@@ -1,0 +1,113 @@
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "position": "Software Engineer",
+  "location": {
+    "city": "San Francisco",
+    "country": "USA"
+  },
+  "dob": "1990-01-15",
+  "contacts": [
+    {
+      "icon": "Phone",
+      "label": "+1 (555) 123-4567",
+      "link": ""
+    },
+    {
+      "icon": "Envelope",
+      "label": "john.doe@example.com",
+      "link": "mailto:john.doe@example.com"
+    },
+    {
+      "icon": "Github",
+      "label": "GitHub Profile",
+      "link": "https://github.com/johndoe"
+    },
+    {
+      "icon": "Linkedin",
+      "label": "LinkedIn Profile",
+      "link": "https://www.linkedin.com/in/johndoe"
+    },
+    {
+      "icon": "Globe",
+      "label": "Portfolio",
+      "link": "https://johndoe.dev"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Programming Languages",
+      "skills": ["Python", "JavaScript", "TypeScript", "Go", "Java"]
+    },
+    {
+      "name": "Web Development",
+      "skills": ["React", "Node.js", "Django", "FastAPI", "Next.js"]
+    },
+    {
+      "name": "Databases",
+      "skills": ["PostgreSQL", "MySQL", "MongoDB", "Redis"]
+    },
+    {
+      "name": "DevOps & Tools",
+      "skills": ["Docker", "Kubernetes", "AWS", "CI/CD", "Git"]
+    },
+    {
+      "name": "Other",
+      "skills": ["Agile", "REST APIs", "GraphQL", "Microservices"]
+    }
+  ],
+  "experience": [
+    {
+      "name": "Tech Corp",
+      "position": "Senior Software Engineer",
+      "period": "Jan 2022 - Present",
+      "city": "San Francisco, CA",
+      "descriptions": [
+        "Led development of microservices architecture serving 1M+ daily active users",
+        "Improved API response time by 40% through optimization and caching strategies",
+        "Mentored junior developers and conducted code reviews to maintain high code quality",
+        "Collaborated with cross-functional teams to deliver features on schedule"
+      ],
+      "technologies": ["Python", "Django", "PostgreSQL", "Docker", "AWS", "Redis"]
+    },
+    {
+      "name": "StartupXYZ",
+      "position": "Full Stack Developer",
+      "period": "Mar 2020 - Dec 2021",
+      "city": "Remote",
+      "descriptions": [
+        "Built responsive web applications using React and Node.js",
+        "Implemented RESTful APIs and integrated third-party services",
+        "Designed and maintained database schemas for optimal performance",
+        "Participated in agile development process with bi-weekly sprints"
+      ],
+      "technologies": ["JavaScript", "React", "Node.js", "MongoDB", "Express"]
+    },
+    {
+      "name": "Digital Solutions Inc",
+      "position": "Junior Developer",
+      "period": "Jun 2018 - Feb 2020",
+      "city": "Austin, TX",
+      "descriptions": [
+        "Developed and maintained client websites using modern web technologies",
+        "Fixed bugs and implemented new features based on client requirements",
+        "Wrote unit tests to ensure code reliability and prevent regressions"
+      ],
+      "technologies": ["JavaScript", "HTML", "CSS", "PHP", "MySQL"]
+    }
+  ],
+  "education": [
+    {
+      "name": "University of California, Berkeley",
+      "degree": "Bachelor of Science",
+      "major": "Computer Science",
+      "period": "2014 - 2018"
+    },
+    {
+      "name": "Stanford University",
+      "degree": "Master of Science",
+      "major": "Artificial Intelligence",
+      "period": "2018 - 2020"
+    }
+  ]
+}
