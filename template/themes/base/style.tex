@@ -18,10 +18,11 @@
 \usepackage{fontawesome5}
 \usepackage{multicol}
 \usepackage{graphicx}
-\usepackage{cfr-lm}
+\usepackage[sfdefault]{inter}
 \usepackage{parcolumns}
 \usepackage[T1]{fontenc}
-\setlength{\footskip}{4.08003pt} 
+\usepackage[scaled=0.95]{inconsolata}
+\setlength{\footskip}{4.08003pt}
 \pagestyle{fancy}
 \fancyhf{} % clear all header and footer fields
 \fancyfoot{}
@@ -77,7 +78,7 @@
 \newcommand{\resumePOR}[3]{
 \vspace{0.5mm}\item
   \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
-    \textbf{#1}\hspace{0.3mm}#2 & \textit{\small{#3}} 
+    \textbf{#1}\hspace{0.3mm}#2 & \textit{\small{#3}}
   \end{tabular*}
   \vspace{-2mm}
 }
@@ -255,7 +256,7 @@
 \newcommand{\cvMain}[7]
 {
 \begin{document}
-  \fontfamily{cmr}\selectfont
+
   \header
   #1
   % \vspace{2mm}
