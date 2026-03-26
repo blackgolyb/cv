@@ -2,7 +2,7 @@
   \BLOCK{ for ed in data.education }
     \cvEducationItem
       {\VAR{ ed.name }}
-      {\VAR{ ed.period }}
+      {\VAR{ ed.startDate | format_period(ed.endDate) }}
       {\VAR{ ed.degree }}
       {\VAR{ ed.major }}
   \BLOCK{ endfor }

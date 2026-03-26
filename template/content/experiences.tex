@@ -2,7 +2,7 @@
   \BLOCK{ for exp in data.experience }
     \cvExperienceItem
       {\VAR{ exp.name }}
-      {\VAR{ exp.period }}
+      {\VAR{ exp.startDate | format_period(exp.endDate) }}
       {\VAR{ exp.position }}
       {\VAR{ exp.city }}
       {

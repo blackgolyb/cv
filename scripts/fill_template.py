@@ -1,6 +1,7 @@
 import json
 import shutil
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 from typing import Protocol
 
@@ -58,6 +59,27 @@ class HttpDataLoader(IDataLoader):
         return response.json()
 
 
+def format_date(iso: str) -> str:
+    """Format an ISO date string (YYYY-MM or YYYY) into 'Mon YYYY' or 'YYYY'."""
+    iso = iso.strip()
+    try:
+        return datetime.strptime(iso, "%Y-%m").strftime("%b %Y")
+    except ValueError:
+        pass
+    try:
+        return datetime.strptime(iso, "%Y").strftime("%Y")
+    except ValueError:
+        pass
+    return iso
+
+
+def format_period(start: str, end: str | None) -> str:
+    """Format a startDate/endDate pair into a LaTeX date range string."""
+    start_fmt = format_date(start)
+    end_fmt = "Present" if end is None else format_date(end)
+    return f"{start_fmt} -- {end_fmt}"
+
+
 class LaTeXEnvironment(jinja2.Environment):
     default_config = {
         "block_start_string": "\\BLOCK{",
@@ -74,6 +96,7 @@ class LaTeXEnvironment(jinja2.Environment):
 
     def __init__(self, **kwargs):
         super().__init__(**{**self.default_config, **kwargs})
+        self.filters["format_period"] = format_period
 
 
 class NotLaTeXFileError(ValueError):
