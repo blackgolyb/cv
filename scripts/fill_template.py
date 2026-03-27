@@ -15,7 +15,6 @@ PROJECT_DIR = Path(__file__).parent.parent
 
 class Settings(BaseSettings):
     theme: str = "base"
-    content_dir: str = "content"
     data_object_name: str = "data"
     project_dir: Path = PROJECT_DIR
     cv_file_name: str
@@ -24,6 +23,10 @@ class Settings(BaseSettings):
     @property
     def template_dir(self) -> Path:
         return self.project_dir / "template"
+
+    @property
+    def theme_content_dir(self) -> Path:
+        return self.build_dir / "themes" / self.theme / "content"
 
     @property
     def config_file(self) -> Path:
@@ -180,8 +183,7 @@ def main(filepath: str, url: str) -> None:
 
     copy_filetree_from_scratch(settings.template_dir, settings.build_dir)
 
-    content_dir_in_build_folder = settings.build_dir / settings.content_dir
-    fill_all_template_files_in_directory(content_dir_in_build_folder, dataForRenderer)
+    fill_all_template_files_in_directory(settings.theme_content_dir, dataForRenderer)
     fill_settings_file(settings)
     fill_config_file(settings, data)
 
