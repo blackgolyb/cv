@@ -22,6 +22,15 @@
 \usepackage{parcolumns}
 \usepackage[T1]{fontenc}
 \usepackage[scaled=0.95]{inconsolata}
+\usepackage{setspace}
+\setstretch{1.15}
+
+% Word wrapping and hyphenation settings
+\usepackage{microtype}
+\sloppy
+\emergencystretch=1em
+\hyphenpenalty=1000
+\exhyphenpenalty=1000
 \setlength{\footskip}{4.08003pt}
 \pagestyle{fancy}
 \fancyhf{} % clear all header and footer fields
@@ -56,7 +65,7 @@
 
 % Sections formatting
 \titleformat{\section}{
-  \vspace{-4pt}\scshape\raggedright\large
+  \vspace{-4pt}\bfseries\raggedright\large
 }{}{0em}{}[\color{black}\titlerule \vspace{-7pt}]
 
 %-------------------------
@@ -128,7 +137,7 @@
 
 
 \newcommand{\cvSection}[1]{
-  \section{\textbf{#1}}
+  \section{#1}
 }
 
 \newcommand{\cvSectionList}[1]{
