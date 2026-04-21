@@ -1,4 +1,4 @@
-.DEFAULT_GOAL := all
+.DEFAULT_GOAL := build
 
 export DOCKER_DEFAULT_PLATFORM=linux/amd64
 PROJECT_DIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
@@ -43,21 +43,22 @@ else
 endif
 
 
-all: build
-
 full: build_container build
 
 build:
+	@mkdir -p $(OUTPUT_FOLDER)
 	@docker rm -f $(DOCKER_CONTAINER_NAME) 2>/dev/null || true
 ifeq ($(DATA_SOURCE_TYPE),url)
 	docker run --rm \
 		--name $(DOCKER_CONTAINER_NAME) \
+		--user "$(shell id -u):$(shell id -g)" \
 		-v "$(OUTPUT_FOLDER):/output" \
 		$(DOCKER_IMAGE_NAME) \
 		--url "$(DATA_SOURCE)"
 else
 	docker run --rm \
 		--name $(DOCKER_CONTAINER_NAME) \
+		--user "$(shell id -u):$(shell id -g)" \
 		-v "$(OUTPUT_FOLDER):/output" \
 		-v "$(DATA_SOURCE):/input/data.json:ro" \
 		$(DOCKER_IMAGE_NAME) \
@@ -69,12 +70,14 @@ shell:
 ifeq ($(DATA_SOURCE_TYPE),url)
 	docker run --rm -it \
 		--name $(DOCKER_CONTAINER_NAME)-shell \
+		--user "$(shell id -u):$(shell id -g)" \
 		-v "$(OUTPUT_FOLDER):/output" \
 		--entrypoint /bin/bash \
 		$(DOCKER_IMAGE_NAME)
 else
 	docker run --rm -it \
 		--name $(DOCKER_CONTAINER_NAME)-shell \
+		--user "$(shell id -u):$(shell id -g)" \
 		-v "$(OUTPUT_FOLDER):/output" \
 		-v "$(DATA_SOURCE):/input/data.json:ro" \
 		--entrypoint /bin/bash \
@@ -87,15 +90,10 @@ build_container:
 		-f $(DOCKERFILE_PATH) \
 		$(PROJECT_DIR)
 
-stop:
-	@docker stop $(DOCKER_CONTAINER_NAME) 2>/dev/null || true
-	@docker stop $(DOCKER_CONTAINER_NAME)-shell 2>/dev/null || true
-
 clean:
-	@docker rm -f $(DOCKER_CONTAINER_NAME) 2>/dev/null || true
-	@docker rm -f $(DOCKER_CONTAINER_NAME)-shell 2>/dev/null || true
+	@rm -rf $(OUTPUT_FOLDER)
 
 clean_image:
 	docker rmi $(DOCKER_IMAGE_NAME) || true
 
-.PHONY: all full build build_container shell stop clean clean_image
+.PHONY: full build build_container shell stop clean clean_image

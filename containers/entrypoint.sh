@@ -6,7 +6,7 @@ echo ""
 
 # Default values
 DATA_SOURCE=""
-BUILD_DIR="/build"
+BUILD_DIR="/tmp/build"
 OUTPUT_DIR="/output"
 INPUT_FILE="/input/data.json"
 LATEX_PROGRAM="${LATEX_PROGRAM:-latexmk}"
